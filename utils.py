@@ -168,6 +168,29 @@ def neighbour_discrepancy(vertex, graph, phi):
     return (phi[vertex] - sum( phi[n] for n in graph.nbs(vertex))/graph.degree(vertex))**2
 
 
+def approximate_upper_bound(graph, phi):
+    """Given a Graph and a list phi, this function attempts to approximate an upper bound.
+    It does this by minimising neighbourhood discrepancy for each vertex individually (i.e., each vertex chooses its own "neighbours", but just because vertex a selects vertex b, does not mean that vertex b must select vertex a.
+    This is not guaranteed to give an upper bound, but should approximate it.
+    """
+    sum_degrees = 0
+    sum_nd = 0
+    for v in range(graph.size()):
+        best = None
+        best_degree = 0
+        opts = list(graph.nbs(v))  # powerset doesn't work on set()s
+        for nbrs in powerset(opts):
+            if not nbrs:
+                continue  # Can't have degree 0
+            value = (phi[v] - sum(phi[n] for n in nbrs)/len(nbrs))**2
+            if best is None or value < best:
+                best = value
+                best_degree = len(nbrs)
+        sum_degrees += best_degree
+        sum_nd += best
+    return 1/2 * ln(sum_degrees) - graph.size()/2 * ln(sum_nd)
+
+
 def func_value(graph, phi):
     """Given a Graph G, and a list phi representing the function \phi : V(G) \mapsto \mathbb{R}
     calculate J_H(\phi)
