@@ -11,7 +11,7 @@ LOG = logging.getLogger(__name__)
 consoleHandler = logging.StreamHandler()
 consoleHandler.setFormatter(formatter)
 LOG.addHandler(consoleHandler)
-LOG.setLevel(logging.INFO)
+#LOG.setLevel(logging.INFO)
 
 
 
@@ -118,8 +118,6 @@ class Optimiser:
                 nb_options = [nb for nb in self.graph.nbs(vx) if rev_order[nb] > vx_ind and self.graph.degree(nb) > 1 and [vx, nb] not in must_not_remove]
             else:
                 nb_options = [nb for nb in self.graph.nbs(vx) if self.graph.degree(nb) > 1 and [vx, nb] not in must_not_remove and [nb, vx] not in must_not_remove]
-            if vx == 185 and 202 in nb_options:
-                print(f"{vx=} {nb_options=}")
             # nb_options is the set of neighbours from which we can potentially delete - those that have degree greater than one,
             # and which we haven't yet considered
             sorted_nbd_list = self.cond_sorted_nbs_remove(vx, self.graph.nbs(vx), nb_options,avsum,n)
