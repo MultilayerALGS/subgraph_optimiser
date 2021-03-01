@@ -39,6 +39,9 @@ vertices, if `remove_first` is False then a further heuristic is run that
 finds edges in the original graph whose endpoints have a small difference in
 weights to use as a starting point.
 
+## Sample usage
+
+
 ```python
 # Read the data,  one number (float) per line, so line 0 has the data for vertex 0 and so-on
 data = read_data("data.txt")
