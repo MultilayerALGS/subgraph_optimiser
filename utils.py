@@ -105,7 +105,7 @@ class Graph:
 
 
 class EmptyGraph(Graph):
-    def __init__(self, adj_matrixgraph):
+    def __init__(self, adj_matrix):
         self._possible = Graph(adj_matrix)
         empty = []
         for i in range(self._possible.size()):
@@ -174,7 +174,7 @@ def func_value(graph, phi):
     """
     K = graph.size()
     val = 1/2 * sum(ln(graph.degree(v)) for v in range(0, K))
-    sum_nd = sum(graph.degree(v) * neighbour_discrepancy_graph(v, graph, phi) for v in range(0, K))
+    sum_nd = sum(graph.degree(v) * neighbour_discrepancy(v, graph, phi) for v in range(0, K))
     assert(sum_nd != 0)
     val -= K/2 * ln(sum_nd)
     return val
