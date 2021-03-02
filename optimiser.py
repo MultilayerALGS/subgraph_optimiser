@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 
 import logging
-from math import log as ln
+from math import log as ln, exp
+from random import random
+
 import numpy as np
-import copy
+
 from utils import EmptyGraph, powerset
 
 formatter = logging.Formatter('%(asctime)s %(message)s', '%H:%M:%S')
@@ -22,6 +24,18 @@ class Optimiser:
         self.plus_fun = plus_fun
         self.minus_fun = minus_fun
         self.fails_allowed = fails_allowed
+        self.annealing = False
+        self.current_temp = 0
+
+    def anneal(self, initial_temp):
+        self.current_temp = initial_temp
+        self.annealing = True
+
+    def temp(self):
+        return self.current_temp
+
+    def cool(self):
+        self.current_temp *= 0.98
 
     def best_possible(self):
         smallest_diff = None
@@ -32,6 +46,19 @@ class Optimiser:
                     smallest_diff = diff
         return (1/2 * sum(ln(self.graph.possibleDegree(u)) for u in self.graph.vertices())
                 - (self.graph.size()/2) * ln(2*smallest_diff**2))
+
+    def accept_change(self, value):
+        """If we are using simulated annealing, this function determines whether to accept the change with the appropriate probability.
+        If we aren't annealing, we just accept positive changes.
+        """
+        if not self.annealing:
+            return value > 0
+        if value > 0:
+            return True
+        prob = exp(value/self.temp())
+        LOG.debug(f"{value=}, {self.temp()=}, {prob=}")
+        self.cool()
+        return random() < prob
 
     def cond_sorted_nbs_remove(self, i,nbs,options,avs,n):
         fixed_nbs = [nb for nb in nbs if nb not in options]
@@ -158,8 +185,10 @@ class Optimiser:
                 nb_gain = pos_fun(nbr_sorted_nbd_lists[i],[vx],[]) - neg_fun(nbr_sorted_nbd_lists[i],[],[vx])
                 combined_gain = vx_gain + nb_gain
                 LOG.debug(f"\ttry {nb=}, {combined_gain=}, {vx_gain=}, {nb_gain=}")
-                #LOG.debug(f"\ttry keeping {find_best_cond(sorted_nbd_list,[],[nb])[0]},{vx} and {find_best_cond(nbr_sorted_nbd_lists[i],[],[vx])[0]},{nb}")
-                if (combined_gain < 0):
+                # combined_gain represents the gain if the edge is selected!
+                # However, we are removing, so the benefit from removing is the
+                # negative of combined_gain.
+                if self.accept_change(-combined_gain):
                     remove.append([[vx,nb],combined_gain])
             LOG.debug(f"\t\t{remove=}")
             if remove:
@@ -216,7 +245,7 @@ class Optimiser:
                 combined_gain = vx_gain + nb_gain
                 LOG.debug(f"\ttry {nb=}, {combined_gain=}, {vx_gain=}, {nb_gain=}")
                 #LOG.debug(f"\ttry keeping {find_best_cond(sorted_nbd_list,[],[nb])[0]},{vx} and {find_best_cond(nbr_sorted_nbd_lists[i],[],[vx])[0]},{nb}")
-                if (combined_gain > 0):
+                if self.accept_change(combined_gain):
                     add.append([[vx,nb],combined_gain])
             LOG.debug(f"\t\t{add=}")
             if add:
