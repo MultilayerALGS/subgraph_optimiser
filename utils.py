@@ -71,7 +71,11 @@ class Graph:
         self._adj[edge[0]][edge[1]] = 0
         self._adj[edge[1]][edge[0]] = 0
         self._degrees[edge[0]] -= 1
+        if self._degrees[edge[0]] == 0:
+            raise Exception(f"Degree 0 at {edge[0]} when removing {edge}")
         self._degrees[edge[1]] -= 1
+        if self._degrees[edge[1]] == 0:
+            raise Exception(f"Degree 0 at {edge[1]} when removing {edge}")
         self._nbs[edge[0]].remove(edge[1])
         self._nbs[edge[1]].remove(edge[0])
 
