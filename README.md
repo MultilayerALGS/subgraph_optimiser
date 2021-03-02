@@ -3,6 +3,12 @@
 This is the code that implements a heuristic subgraph optimising algorithm as
 described in &lt;yet to be published paper by Lee, Meeks and Pettersson&gt;.
 
+This work was (and is) funded by [EPSRC Grant
+EP/T004878/1](https://gow.epsrc.ukri.org/NGBOViewGrant.aspx?GrantRef=EP/T004878/1)
+
+
+## Background
+
 The goal is to find a subgraph of a given weighted graph that maximises a known
 function. Roughly speaking, the value of the function benefits from the graph
 containing additional edges, but there is also a penalty associated with
