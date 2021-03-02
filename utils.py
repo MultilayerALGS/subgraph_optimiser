@@ -190,9 +190,9 @@ def approximate_upper_bound(graph, phi):
             if best is None or value < best:
                 best = value
                 best_degree = len(nbrs)
-        sum_degrees += best_degree
+        sum_degrees += ln(best_degree)
         sum_nd += best
-    return 1/2 * ln(sum_degrees) - graph.size()/2 * ln(sum_nd)
+    return 1/2 * sum_degrees - graph.size()/2 * ln(sum_nd)
 
 
 def func_value(graph, phi):

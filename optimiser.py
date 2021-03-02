@@ -135,6 +135,9 @@ class Optimiser:
             LOG.info(f"{vx=} nbrs={self.graph.degree(vx)} nb_options={len(nb_options)} sort_list={len(sorted_nbd_list)} sum_nbrs={sum(len(x) for x in nbr_sorted_nbd_lists)}")
             remove = []
             for i in range(0,len(nb_options)):
+                # If we've removed everything except one edge, we have to stop!
+                if self.graph.degree(vx) - len(remove) == 1:
+                    break
                 nb = nb_options[i]
                 LOG.debug(f"\t{nb=}")
                 if self.plus_fun == "max":
