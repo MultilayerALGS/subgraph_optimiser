@@ -195,6 +195,29 @@ def approximate_upper_bound(graph, phi):
     return 1/2 * sum_degrees - graph.size()/2 * ln(sum_nd)
 
 
+def worse_upper_bound(graph, phi):
+    """Given a Graph and a list phi, this function calculates an upper bound.
+    It does this by minimising neighbourhood discrepancy for each vertex individually (i.e., each vertex chooses its own "neighbours", but just because vertex a selects vertex b, does not mean that vertex b must select vertex a.
+    It does this for the second term in the formula (the "penalty") but for the first term (that maximises number of edges) it assumes that no edges are removed.
+    """
+    sum_degrees = 0
+    sum_nd = 0
+    for v in range(graph.size()):
+        best = None
+        best_degree = 0
+        opts = list(graph.nbs(v))  # powerset doesn't work on set()s
+        for nbrs in powerset(opts):
+            if not nbrs:
+                continue  # Can't have degree 0
+            value = (phi[v] - sum(phi[n] for n in nbrs)/len(nbrs))**2
+            if best is None or value < best:
+                best = value
+                best_degree = len(nbrs)
+        sum_degrees += ln(graph.degree(v))
+        sum_nd += best
+    return 1/2 * sum_degrees - graph.size()/2 * ln(sum_nd)
+
+
 def func_value(graph, phi):
     """Given a Graph G, and a list phi representing the function \phi : V(G) \mapsto \mathbb{R}
     calculate J_H(\phi)
