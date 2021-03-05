@@ -107,6 +107,8 @@ class Graph:
                 return False
         return True
 
+    def __str__(self):
+        return "\n".join(" ".join(str(e) for e in row) for row in self._adj)
 
 class EmptyGraph(Graph):
     def __init__(self, adj_matrix):
