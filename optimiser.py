@@ -379,7 +379,8 @@ class Optimiser:
                 if lastadded:
                     if newscore < oldscore:
                         res = "bad"
-                        must_not_add.extend(lastadded)
+                        if not self.annealing:
+                            must_not_add.extend(lastadded)
                         self.graph.remove_edges(lastadded)
                     else:
                         res = "good"
@@ -398,7 +399,8 @@ class Optimiser:
                 if lastremoved:
                     if newscore < oldscore:
                         res = "bad"
-                        must_not_remove.extend(lastremoved)
+                        if not self.annealing:
+                            must_not_remove.extend(lastremoved)
                         self.graph.add_edges(lastremoved)
                     else:
                         change = True
