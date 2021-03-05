@@ -159,7 +159,7 @@ class Optimiser:
                 # u_options is the set of neighbours for u that we could still change
                 nbr_sorted_nbd_lists += [self.cond_sorted_nbs_remove(u,self.graph.nbs(u),u_options,avsum,n)]
                 # add the sorted list of neighbour options for u to the nbr_sorted_nbd_lists
-            LOG.info(f"{vx=} nbrs={self.graph.degree(vx)} nb_options={len(nb_options)} sort_list={len(sorted_nbd_list)} sum_nbrs={sum(len(x) for x in nbr_sorted_nbd_lists)}")
+            LOG.debug(f"{vx=} nbrs={self.graph.degree(vx)} nb_options={len(nb_options)} sort_list={len(sorted_nbd_list)} sum_nbrs={sum(len(x) for x in nbr_sorted_nbd_lists)}")
             remove = []
             for i in range(0,len(nb_options)):
                 # If we've removed everything except one edge, we have to stop!
@@ -222,7 +222,7 @@ class Optimiser:
                 nbr_sorted_nbd_lists += [self.cond_sorted_nbs_add(u,self.graph.allPossNbs(u),u_options,avsum,n)]
                 # add the sorted list of neighbour options for u to the nbr_sorted_nbd_lists
             add = []
-            LOG.info(f"{vx=} nbrs={self.graph.degree(vx)} nb_options={len(nb_options)} sort_list={len(sorted_nbd_list)} sum_nbrs={sum(len(x) for x in nbr_sorted_nbd_lists)}")
+            LOG.debug(f"{vx=} nbrs={self.graph.degree(vx)} nb_options={len(nb_options)} sort_list={len(sorted_nbd_list)} sum_nbrs={sum(len(x) for x in nbr_sorted_nbd_lists)}")
             for i in range(0,len(nb_options)):
                 nb = nb_options[i]
                 LOG.debug(f"\t{nb=}")
