@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 from utils import read_matrix, read_data
-from optimser import Optimiser
+from optimiser import Optimiser
 
 # Read the data,  one number (float) per line, so line 0 has the data for vertex 0 and so-on
 data = read_data("data.txt")
